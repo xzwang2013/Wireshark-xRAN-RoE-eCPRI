@@ -18,6 +18,7 @@
 	local xran_cplane_section    = ProtoField.bytes("xRAN.cplane_section", "Section", base.HEX)	
 	local xran_cplane_extension    = ProtoField.bytes("xRAN.cplane_extension", "Extension", base.HEX)
 	local xran_cplane_section_extension_data    = ProtoField.bytes("xRAN.cplane_section_extension_data", "Data", base.HEX)
+	local xran_cplane_unknow_data    = ProtoField.bytes("xRAN.cplane_section_unknow", "Unknown", base.HEX)	
 	
 	local xran_uplane_sections    = ProtoField.bytes("xRAN.uplane_sections", "Uplane Sections", base.HEX)	
 	local xran_uplane_section    = ProtoField.bytes("xRAN.uplane_section", "Section", base.HEX)	
@@ -30,6 +31,7 @@
 		xran_cplane_section,
 		xran_cplane_extension,
 		xran_cplane_section_extension_data,
+		xran_cplane_unknow_data,
 		xran_uplane_sections,
 		xran_uplane_section,
 		xran_uplane_header,
@@ -372,7 +374,7 @@
 		return offset
 	end
 	
-	function parse_CplaneSections_5_1(_root, _value, _len)
+	function parse_CplaneSections_6_1(_root, _value, _len)
 		local value 
 		local value_1
 		local ef = 0
@@ -394,14 +396,32 @@
 		value_1 = value_1 + value
 		_root:add("ueId:", value_1)
 		
-		len = 8
-		if ef == 1 then
-			sub_node = _root:add("Extensions:")
+		value = _value:range(8, 2):uint()
+		_root:add("regularizationFactor:", value)
 		
-			local len_extensions = parse_CplaneSectionExtension(sub_node, _value:range(len, _len - len), _len - len)
-			len = len + len_extensions
-			sub_node:append_text(" ("..len_extensions.." bytes)")	
-		end
+		value = _value:range(10, 1):uint()
+		value_1 = bits.rshift(value, 4)
+		_root:add("reserved:", value_1)
+		
+		value_1 = bits.band(value, 0x08)
+		value_1 = bits.rshift(value_1, 3)
+		_root:add("rb:", value_1)
+		
+		value_1 = bits.band(value, 0x04)
+		value_1 = bits.rshift(value_1, 2)
+		_root:add("symInc:", value_1)
+		
+		value_1 = bits.band(value, 0x03)
+		value_1 = bits.lshift(value_1, 8)
+		value = _value:range(11, 1):uint()
+		value = value + value_1
+		_root:add("startPrbc:", value)
+		
+		value = _value:range(12, 1):uint()
+		_root:add("numPrbc:", value)
+		
+		len = 13
+		
 		
 		return len
 	end
@@ -421,7 +441,9 @@
 			index = index + 1
 		end	
 		
-		return offset
+		_root:add(xran_cplane_unknow_data, _value:range(offset, _len - offset))
+		
+		return _len
 	end
 
 	
