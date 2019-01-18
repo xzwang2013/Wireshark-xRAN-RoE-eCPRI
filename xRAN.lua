@@ -255,7 +255,7 @@
 		local index = 0
 		
 		while (offset < _len and index < _numberOfsections) do	
-			local sub_node = _root:add(roe_proto.fields[12], _value:range(offset, 6))
+			local sub_node = _root:add(xran_cplane_section, _value:range(offset, 6))
 			len = parse_CplaneSections_1_1(sub_node, _value:range(offset, _len - offset), _len - offset)
 			sub_node:append_text(" ("..len.." bytes)")
 			offset = offset + len
@@ -312,7 +312,7 @@
 		
 		while (offset < _len and index < _numberOfsections) do	
 			--local sub_node = _root:add("Section_"..index..":")
-			local sub_node = _root:add(roe_proto.fields[12], _value:range(offset, 6))
+			local sub_node = _root:add(xran_cplane_section, _value:range(offset, 6))
 			len = parse_CplaneSections_3_1(sub_node, _value:range(offset, _len - offset), _len - offset)
 			sub_node:append_text(" ("..len.." bytes)")
 			offset = offset + len
@@ -362,7 +362,7 @@
 		local index = 0
 		
 		while (offset < _len and index < _numberOfsections) do	
-			local sub_node = _root:add(roe_proto.fields[12], _value:range(offset, 6))
+			local sub_node = _root:add(xran_cplane_section, _value:range(offset, 6))
 			len = parse_CplaneSections_5_1(sub_node, _value:range(offset, _len - offset), _len - offset)
 			sub_node:append_text(" ("..len.." bytes)")
 			offset = offset + len
@@ -372,18 +372,49 @@
 		return offset
 	end
 	
+	function parse_CplaneSections_5_1(_root, _value, _len)
+		local value 
+		local value_1
+		local ef = 0
+		
+		if _len < 7 then
+			return _len
+		end
+		
+		parse_CplaneSections_common(_root, _value, 6)
+		
+		value = _value:range(6, 1):uint()
+		value_1 = bits.rshift(value, 7)
+		_root:add("ef:", value_1)
+		ef = value_1
+		
+		value_1 = bits.band(value ,0x7F)
+		value_1 = bits.lshift(value_1, 8)
+		value = _value:range(7, 1):uint()
+		value_1 = value_1 + value
+		_root:add("ueId:", value_1)
+		
+		len = 8
+		if ef == 1 then
+			sub_node = _root:add("Extensions:")
+		
+			local len_extensions = parse_CplaneSectionExtension(sub_node, _value:range(len, _len - len), _len - len)
+			len = len + len_extensions
+			sub_node:append_text(" ("..len_extensions.." bytes)")	
+		end
+		
+		return len
+	end
+	
 	function parse_CplaneSections_6(_numberOfsections, _root, _value, _len)
 		local offset = 0
 		local len = 0
 		local index = 0
 		
-		--Don't support type 6
-		if 1 then
-			return _len
-		end
-		
-		while (offset < _len and index < _numberOfsections) do	
-			local sub_node = _root:add(roe_proto.fields[12], _value:range(offset, 6))
+		--Can't fully support type 6 
+		--while (offset < _len and index < _numberOfsections) do	
+		while (offset < _len and index < 1) do
+			local sub_node = _root:add(xran_cplane_section, _value:range(offset, 6))
 			len = parse_CplaneSections_6_1(sub_node, _value:range(offset, _len - offset), _len - offset)
 			sub_node:append_text(" ("..len.." bytes)")
 			offset = offset + len
@@ -619,7 +650,7 @@
 		local index = 0
 		
 		while (offset < _len and index < _numberOfsections) do	
-			local sub_node = _root:add(roe_proto.fields[12], _value:range(offset, 6))
+			local sub_node = _root:add(xran_cplane_section, _value:range(offset, 6))
 			len = parse_CplaneSections_7_1(sub_node, _value:range(offset, _len - offset), _len - offset)
 			sub_node:append_text(" ("..len.." bytes)")
 			offset = offset + len
