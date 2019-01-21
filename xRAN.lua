@@ -383,23 +383,21 @@
 			return _len
 		end
 		
-		parse_CplaneSections_common(_root, _value, 6)
-		
-		value = _value:range(6, 1):uint()
+		value = _value:range(0, 1):uint()
 		value_1 = bits.rshift(value, 7)
 		_root:add("ef:", value_1)
 		ef = value_1
 		
 		value_1 = bits.band(value ,0x7F)
 		value_1 = bits.lshift(value_1, 8)
-		value = _value:range(7, 1):uint()
+		value = _value:range(1, 1):uint()
 		value_1 = value_1 + value
 		_root:add("ueId:", value_1)
 		
-		value = _value:range(8, 2):uint()
+		value = _value:range(2, 2):uint()
 		_root:add("regularizationFactor:", value)
 		
-		value = _value:range(10, 1):uint()
+		value = _value:range(4, 1):uint()
 		value_1 = bits.rshift(value, 4)
 		_root:add("reserved:", value_1)
 		
@@ -413,15 +411,14 @@
 		
 		value_1 = bits.band(value, 0x03)
 		value_1 = bits.lshift(value_1, 8)
-		value = _value:range(11, 1):uint()
+		value = _value:range(5, 1):uint()
 		value = value + value_1
 		_root:add("startPrbc:", value)
 		
-		value = _value:range(12, 1):uint()
+		value = _value:range(6, 1):uint()
 		_root:add("numPrbc:", value)
 		
-		len = 13
-		
+		len = 7
 		
 		return len
 	end
@@ -694,7 +691,7 @@
 		elseif _type == 5 then
 			len = parse_CplaneSections_5(_numberOfsections, _root, _value, _len)
 		elseif _type == 6 then
-			-- Not support type 6 
+			-- Not fully support type 6 
 			len = parse_CplaneSections_6(_numberOfsections, _root, _value, _len)
 		elseif _type == 7 then
 			len = parse_CplaneSectionType_7(_root, _value, _len)
