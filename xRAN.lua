@@ -449,6 +449,7 @@
 		local value_1 = 0
 		local laaMsgType = 0
 		local laaMsgLen = 0
+		local len = 0
 		
 		if _len < 2 then
 			return _len
@@ -456,10 +457,10 @@
 		
 		value = _value:range(0, 1):uint()
 		laaMsgType = bits.rshift(value, 4)
-		_root:add("laaMsgType", laaMsgType)
+		_root:add("laaMsgType:", laaMsgType)
 		
 		laaMsgLen = bits.band(value, 0x0F)
-		_root:add("laaMsgLen", laaMsgType)
+		_root:add("laaMsgLen:", laaMsgLen)
 
 		if laaMsgType == 0 then
 			if _len < 8 then
@@ -467,200 +468,209 @@
 			end
 			
 			value = _value:range(1, 2):uint()
-			_root:add("lbtHandle", value)
+			_root:add("lbtHandle:", value)
 			
 			value = _value:range(3, 1):uint()
-			value = bits.lshift(value, 1)
+			value = bits.lshift(value, 2)
 			value_1 = _value:range(4, 1):uint()
 			value_1 = bits.rshift(value_1, 6)
 			value = value + value_1
-			_root:add("lbtOffset", value)
+			_root:add("lbtOffset:", value)
 			
 			value = _value:range(4, 1):uint()
 			value_1 = bits.rshift(value, 4)
 			value_1 = bits.band(value_1, 0x03)
-			_root:add("lbtMode", value_1)
+			_root:add("lbtMode:", value_1)
 			
 			value_1 = bits.band(value, 0x0F)
 			value_1 = bits.rshift(value, 3)
-			_root:add("reserved", value_1)
+			_root:add("reserved:", value_1)
 			
 			value_1 = bits.band(value, 0x07)
-			_root:add("lbtDeferFactor", value)
+			_root:add("lbtDeferFactor:", value)
 			
 			value = _value:range(5, 1):uint()
-			value = bits.lshift(value, 1)
+			value = bits.lshift(value, 2)
 			value_1 = _value:range(6, 1):uint()
 			value_1 = bits.rshift(value_1, 6)
 			value = value + value_1
-			_root:add("lbtBakoffCounter", value)
+			_root:add("lbtBakoffCounter:", value)
 			
 			value = _value:range(6, 1):uint()
 			value_1 = bits.band(value, 0x3B)
 			value_1 = bits.rshift(value_1, 2)
-			_root:add("MCOT", value_1)
+			_root:add("MCOT:", value_1)
 			
 			value_1 = bits.band(value, 0x03)
-			_root:add("reserved", value_1)
+			_root:add("reserved:", value_1)
 			
 			value = _value:range(7, 1):uint()
-			_root:add("reserved", value_1)
+			_root:add("reserved:", value_1)
 			
+			len = 8
 		elseif laaMsgType == 1 then
 			if _len < 8 then
 				return _len
 			end
 			
 			value = _value:range(1, 2):uint()
-			_root:add("lbtHandle", value)
+			_root:add("lbtHandle:", value)
 			
 			value = _value:range(3, 1):uint()
-			value = bits.lshift(value, 1)
+			value = bits.lshift(value, 2)
 			value_1 = _value:range(4, 1):uint()
 			value_1 = bits.rshift(value_1, 6)
 			value = value + value_1
-			_root:add("lbtOffset", value)
+			_root:add("lbtOffset:", value)
 			
 			value = _value:range(4, 1):uint()
 			value_1 = bits.rshift(value, 4)
 			value_1 = bits.band(value_1, 0x03)
-			_root:add("lbtMode", value_1)
+			_root:add("lbtMode:", value_1)
 			
 			value_1 = bits.band(value, 0x0F)
-			_root:add("reserved", value_1)
-			_root:add("reserved", value_1)
+			_root:add("reserved:", value_1)
+			_root:add("reserved:", value_1)
 			
 			value = _value:range(5, 1):uint()
-			_root:add("reserved", value)
+			_root:add("reserved:", value)
 			
 			value = _value:range(6, 1):uint()
-			_root:add("reserved", value)
+			_root:add("reserved:", value)
 			
 			value = _value:range(7, 1):uint()
-			_root:add("reserved", value)
+			_root:add("reserved:", value)
+			
+			len = 8
 		elseif laaMsgType == 2 then
 			if _len < 4 then
 				return _len
 			end	
 			
 			value = _value:range(1, 1):uint()
-			_root:add("lbtHandle", value)
+			_root:add("lbtHandle:", value)
 			
 			value = _value:range(2, 1):uint()
 			value_1 = bits.rshift(value, 6)
-			_root:add("lbtPdschRes", value_1)
+			_root:add("lbtPdschRes:", value_1)
 			
 			value_1 = bits.band(value, 0x20)
 			value_1 = bits.rshift(value_1, 5)
-			_root:add("inParSF", value_1)
+			_root:add("inParSF:", value_1)
 			
 			value_1 = bits.band(value, 0x10)
 			value_1 = bits.rshift(value_1, 4)
-			_root:add("sfStatus", value_1)
+			_root:add("sfStatus:", value_1)
 			
-			value = bits.lshift(value, 4)
+			value = bits.lshift(value, 8)
 			value_1 = _value:range(3, 1):uint()
 			value_1 = value_1 + value
-			_root:add("sfnSf", value_1)
+			_root:add("sfnSf:", value_1)
+			
+			len = 4
 		elseif laaMsgType == 3 then
 			if _len < 4 then
 				return _len
 			end	
 			
 			value = _value:range(1, 1):uint()
-			_root:add("lbtHandle", value)
+			_root:add("lbtHandle:", value)
 			
 			value = _value:range(2, 1):uint()
 			value_1 = bits.rshift(value, 7)
-			_root:add("lbtDrsRes", value_1)
+			_root:add("lbtDrsRes:", value_1)
 			
 			value_1 = bits.band(value, 0x7F)
-			_root:add("reserved", value_1)
+			_root:add("reserved:", value_1)
 			
 			value_1 = _value:range(3, 1):uint()
-			_root:add("reserved", value_1)
+			_root:add("reserved:", value_1)
+			
+			len = 4
 		elseif laaMsgType == 4 then
 			if _len < 4 then
 				return _len
 			end	
 			
 			value = _value:range(1, 1):uint()
-			_root:add("lbtHandle", value)
+			_root:add("lbtHandle:", value)
 			
 			value = _value:range(2, 1):uint()
 			value_1 = bits.rshift(value, 7)
-			_root:add("lbtBufErr", value_1)
+			_root:add("lbtBufErr:", value_1)
 			
 			value_1 = bits.band(value, 0x7F)
-			_root:add("reserved", value_1)
+			_root:add("reserved:", value_1)
 			
 			value_1 = _value:range(3, 1):uint()
-			_root:add("reserved", value_1)	
+			_root:add("reserved:", value_1)	
+			
+			len = 4
 		elseif laaMsgType == 5 then
 			if _len < 8 then
 				return _len
 			end	
 			
 			value = _value:range(1, 2):uint()
-			_root:add("lbtHandle", value)
+			_root:add("lbtHandle:", value)
 			
 			value = _value:range(3, 1):uint()
-			_root:add("lbtCWConfigH", value_1)
+			_root:add("lbtCWConfigH:", value_1)
 			
 			value = _value:range(4, 1):uint()
-			_root:add("lbtCWConfigT", value)
+			_root:add("lbtCWConfigT:", value)
 			
 			value = _value:range(5, 1):uint()
 			value_1 = bits.rshift(value, 2)
-			_root:add("lbtMode", value_1)
+			_root:add("lbtMode:", value_1)
 			
 			value_1 = bits.band(value, 0x30)
 			value_1 = bits.rshift(value, 4)
-			_root:add("lbtTraffcClass", value_1)
+			_root:add("lbtTraffcClass:", value_1)
 			
 			value_1 = bits.band(value, 0x0F)
 			_root:add("reserved", value_1)
 			
 			value_1 = _value:range(6, 2):uint()
-			_root:add("reserved", value_1)		
+			_root:add("reserved:", value_1)		
+			
+			len = 8
 		elseif laaMsgType == 6 then
 			if _len < 4 then
 				return _len
 			end	
 			
 			value = _value:range(1, 2):uint()
-			_root:add("lbtHandle", value)
+			_root:add("lbtHandle:", value)
 			
 			value = _value:range(3, 1):uint()
 			value_1 = bits.rshift(value, 7)
-			_root:add("lbtCWR Rst", value_1)
+			_root:add("lbtCWR Rst:", value_1)
 			
 			value_1 = bits.band(value, 0x7F)
-			_root:add("reserved", value_1)			
+			_root:add("reserved:", value_1)	
+			
+			len = 4			
 		else
-			return
+			len = _len
 		end
+		
+		return len
 	end 
 
 	function parse_CplaneSections_7_1(_root, _value, _len)
 		local value
+		local len = 0
 		
-		if _len < 7 then
+		if _len < 4 then
 			return _len
 		end
-		
-		parse_CplaneSections_common(_root, _value, 6)
-		
-		value = _value:range(6, 2):uint()
-		_root:add("reserved:", value)
-		
-		len = 8
-		sub_node = _root:add("Extensions:")
-		local len_extensions = parse_CplaneSectionExtension_type7(sub_node, _value:range(len, _len - len), _len - len)
+
+		local len_extensions = parse_CplaneSectionExtension_type7(_root, _value:range(len, _len - len), _len - len)
 		len = len + len_extensions
-		sub_node:append_text(" ("..len_extensions.." bytes)")	
+		--sub_node:append_text(" ("..len_extensions.." bytes)")	
 			
-		return 8
+		return len
 	end
 	
 	function parse_CplaneSections_7(_numberOfsections, _root, _value, _len)
@@ -669,7 +679,7 @@
 		local index = 0
 		
 		while (offset < _len and index < _numberOfsections) do	
-			local sub_node = _root:add(xran_cplane_section, _value:range(offset, 6))
+			local sub_node = _root:add(xran_cplane_section, _value:range(offset, 4))
 			len = parse_CplaneSections_7_1(sub_node, _value:range(offset, _len - offset), _len - offset)
 			sub_node:append_text(" ("..len.." bytes)")
 			offset = offset + len
@@ -694,7 +704,8 @@
 			-- Not fully support type 6 
 			len = parse_CplaneSections_6(_numberOfsections, _root, _value, _len)
 		elseif _type == 7 then
-			len = parse_CplaneSectionType_7(_root, _value, _len)
+			-- Must 1 section ??
+			len = parse_CplaneSections_7(1, _root, _value, _len)
 		else
 			return _len
 		end
