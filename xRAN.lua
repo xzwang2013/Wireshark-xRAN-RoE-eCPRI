@@ -483,11 +483,11 @@
 			_root:add("lbtMode:", value_1)
 			
 			value_1 = bits.band(value, 0x0F)
-			value_1 = bits.rshift(value, 3)
+			value_1 = bits.rshift(value_1, 3)
 			_root:add("reserved:", value_1)
 			
 			value_1 = bits.band(value, 0x07)
-			_root:add("lbtDeferFactor:", value)
+			_root:add("lbtDeferFactor:", value_1)
 			
 			value = _value:range(5, 1):uint()
 			value = bits.lshift(value, 2)
@@ -497,7 +497,7 @@
 			_root:add("lbtBakoffCounter:", value)
 			
 			value = _value:range(6, 1):uint()
-			value_1 = bits.band(value, 0x3B)
+			value_1 = bits.band(value, 0x3C)
 			value_1 = bits.rshift(value_1, 2)
 			_root:add("MCOT:", value_1)
 			
@@ -562,6 +562,7 @@
 			value_1 = bits.rshift(value_1, 4)
 			_root:add("sfStatus:", value_1)
 			
+            value = bits.band(value, 0x0F)
 			value = bits.lshift(value, 8)
 			value_1 = _value:range(3, 1):uint()
 			value_1 = value_1 + value
@@ -615,20 +616,20 @@
 			_root:add("lbtHandle:", value)
 			
 			value = _value:range(3, 1):uint()
-			_root:add("lbtCWConfigH:", value_1)
+			_root:add("lbtCWConfigH:", value)
 			
 			value = _value:range(4, 1):uint()
 			_root:add("lbtCWConfigT:", value)
 			
 			value = _value:range(5, 1):uint()
-			value_1 = bits.rshift(value, 2)
+			value_1 = bits.rshift(value, 6)
 			_root:add("lbtMode:", value_1)
 			
-			value_1 = bits.band(value, 0x30)
-			value_1 = bits.rshift(value, 4)
+			value_1 = bits.band(value, 0x38)
+			value_1 = bits.rshift(value_1, 3)
 			_root:add("lbtTraffcClass:", value_1)
 			
-			value_1 = bits.band(value, 0x0F)
+			value_1 = bits.band(value, 0x07)
 			_root:add("reserved", value_1)
 			
 			value_1 = _value:range(6, 2):uint()
